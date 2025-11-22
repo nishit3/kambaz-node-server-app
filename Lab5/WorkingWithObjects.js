@@ -7,6 +7,13 @@ const assignment = {
   score: 0,
 };
 
+const module = {
+  id: 1,
+  name: "Introduction to NodeJS",
+  description: "Learn the basics of NodeJS",
+  course: "CS5610",
+};
+
 export default function WorkingWithObjects(app) {
   const getAssignment = (req, res) => {
     res.json(assignment);
@@ -19,7 +26,18 @@ export default function WorkingWithObjects(app) {
     assignment.title = newTitle;
     res.json(assignment);
   };
+  
+  // Module endpoints
+  const getModule = (req, res) => {
+    res.json(module);
+  };
+  const getModuleName = (req, res) => {
+    res.json(module.name);
+  };
+  
   app.get("/lab5/assignment", getAssignment);
   app.get("/lab5/assignment/title", getAssignmentTitle);
   app.get("/lab5/assignment/title/:newTitle", setAssignmentTitle);
+  app.get("/lab5/module", getModule);
+  app.get("/lab5/module/name", getModuleName);
 }
