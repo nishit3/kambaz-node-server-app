@@ -13,10 +13,14 @@ import db from "./Kambaz/Database/index.js";
 
 const app = express();
 
+const allowedOrigins = ["http://localhost:3000", process.env.CLIENT_URL].filter(
+  Boolean
+);
+
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: allowedOrigins,
   })
 );
 
