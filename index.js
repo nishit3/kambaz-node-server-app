@@ -61,6 +61,24 @@ if (process.env.SERVER_ENV !== "development") {
 app.use(session(sessionOptions));
 app.use(express.json());
 
+// Health check endpoint to prevent cold starts
+app.get("/health", (req, res) => {
+  res.status(200).json({ 
+    status: "OK", 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    message: "Server is running"
+  });
+});
+
+// Alternative health endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ 
+    status: "healthy", 
+    timestamp: new Date().toISOString()
+  });
+});
+
 UserRoutes(app, db);
 CourseRoutes(app, db);
 ModuleRoutes(app, db);
