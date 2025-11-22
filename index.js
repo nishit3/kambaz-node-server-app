@@ -13,14 +13,32 @@ import db from "./Kambaz/Database/index.js";
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", process.env.CLIENT_URL].filter(
-  Boolean
-);
-
+// Allow localhost and any Vercel deployment
 app.use(
   cors({
     credentials: true,
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      // Allow localhost
+      if (origin.includes("localhost")) {
+        return callback(null, true);
+      }
+      
+      // Allow any vercel.app domain
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+      
+      // Allow specific CLIENT_URL from env
+      if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) {
+        return callback(null, true);
+      }
+      
+      // Reject other origins
+      callback(new Error("Not allowed by CORS"));
+    },
   })
 );
 
@@ -35,7 +53,8 @@ if (process.env.SERVER_ENV !== "development") {
   sessionOptions.cookie = {
     sameSite: "none",
     secure: true,
-    domain: process.env.SERVER_URL,
+    // Remove domain restriction to allow cross-domain cookies
+    // domain: process.env.SERVER_URL,
   };
 }
 
