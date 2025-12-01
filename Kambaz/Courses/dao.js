@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function CoursesDao(db) {
   function findAllCourses() {
-    // Only return name and description for Dashboard
-    return model.find({}, { name: 1, description: 1 });
+    // Return _id, name, and description for Dashboard
+    return model.find({}, { _id: 1, name: 1, description: 1, imageName: 1, number: 1 });
   }
 
   function findCourseById(courseId) {
